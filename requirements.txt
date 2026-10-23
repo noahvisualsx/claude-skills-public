@@ -1,0 +1,6 @@
+# wechat-miniprogram-lab-report: fill_report.py / make_assets.py / clean_shot.py
+python-docx
+pillow
+numpy
+# refimg-prompt-cn: scripts/face_privacy_tool.py
+opencv-python-headless
