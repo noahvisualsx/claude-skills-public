@@ -141,7 +141,6 @@ def build_clash():
     L.append("unified-delay: true")
     L.append("tcp-concurrent: true")
     L.append("find-process-mode: strict")
-    L.append("global-client-fingerprint: chrome")
     L.append("profile:")
     L.append("  store-selected: true")
     L.append("  store-fake-ip: true")
@@ -654,6 +653,39 @@ h2{font-size:16px;margin:28px 0 10px}
 # ============================================================
 #  HTTP 服务
 # ============================================================
+# ---------- 订阅头里的流量信息 (小火箭/Clash 顶部的 ↑ ↓ TOT EXPIRE) ----------
+# 用量读 vnstat 的本月统计 (重启不丢); 额度和到期写在 nodes.json:
+#   "quota_gb": 服务商每月流量额度 (GB), 0 = 未知
+#   "expire":   到期时间 Unix 时间戳, 0 = 不显示 (按量付费的机器填 0)
+QUOTA_GB = float(_C.get("quota_gb", 0) or 0)
+EXPIRE = int(_C.get("expire", 0) or 0)
+_UI_CACHE = [0.0, ""]
+
+
+def userinfo():
+    if _UI_CACHE[1] and time.time() - _UI_CACHE[0] < 60:
+        return _UI_CACHE[1]
+    up = down = 0
+    try:
+        r = subprocess.run(["ip", "route", "show", "default"],
+                           stdout=subprocess.PIPE, universal_newlines=True, timeout=5).stdout.split()
+        dev = r[r.index("dev") + 1]
+        out = subprocess.run(["vnstat", "--json", "m", "-i", dev],
+                             stdout=subprocess.PIPE, universal_newlines=True, timeout=5).stdout
+        t = json.loads(out)["interfaces"][0]["traffic"]
+        now = time.localtime()
+        for m in t.get("month") or t.get("months") or []:
+            if m["date"]["year"] == now.tm_year and m["date"]["month"] == now.tm_mon:
+                # 服务器收到的算上行, 发出的算下行 (服务商一般按出站计费, 对应 ↓)
+                up, down = int(m["rx"]), int(m["tx"])
+    except Exception:
+        pass
+    s = "upload=%d; download=%d; total=%d; expire=%d" % (
+        up, down, int(QUOTA_GB * 1024 ** 3), EXPIRE)
+    _UI_CACHE[:] = [time.time(), s]
+    return s
+
+
 class H(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"
     server_version = "sub"
@@ -665,7 +697,7 @@ class H(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(data)))
         self.send_header("Cache-Control", "no-store")
         self.send_header("Profile-Update-Interval", "12")
-        self.send_header("Subscription-Userinfo", "upload=0; download=0; total=0; expire=0")
+        self.send_header("Subscription-Userinfo", userinfo())
         self.end_headers()
         try:
             self.wfile.write(data)

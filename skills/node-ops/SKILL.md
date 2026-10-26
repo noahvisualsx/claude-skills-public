@@ -83,7 +83,8 @@ exec ssh -i ~/.ssh/jp_vps -o IdentitiesOnly=yes -o StrictHostKeyChecking=no \
 base64 -i sub-server.py | vps 'base64 -d > /tmp/sub-server.py'
 base64 -i build.sh      | vps 'base64 -d > /tmp/build.sh && chmod +x /tmp/build.sh && echo UPLOADED'
 # 3) 后台跑 (约 10 分钟), 然后 poll 哨兵
-vps 'rm -f /tmp/node-ops-done; setsid nohup bash /tmp/build.sh US </dev/null >/dev/null 2>&1 & sleep 3; echo LAUNCHED'
+TAG=LAX   # 节点名前缀: LAX / SJC / 新机器自定, 订阅里显示为 TAG-01-直连 等
+vps 'rm -f /tmp/node-ops-done; setsid nohup bash /tmp/build.sh '$TAG' </dev/null >/dev/null 2>&1 & sleep 3; echo LAUNCHED'
 # poll: test -f /tmp/node-ops-done
 # 4) 验证 —— 必做
 base64 -i verify.sh | vps 'base64 -d > /tmp/verify.sh'
@@ -207,6 +208,8 @@ curl -s -A "<浏览器UA>" https://www.youtube.com/ | grep -oE '"GL":"[A-Z]{2}"'
 
 改配置后：`systemctl restart sub-server`。请求日志 `/var/log/sub-server.log`（时间/来源IP/路径/返回格式/UA）——**用户说"订阅有问题"先看这个**，能直接看出客户端拿到了什么。
 
+**订阅头流量信息（小火箭/Clash 顶部的 ↑ ↓ TOT EXPIRE）**：`Subscription-Userinfo` 头由 `userinfo()` 生成，用量读 **vnstat 本月统计**（build.sh 已装 vnstat，重启不丢，60 秒缓存）；服务器收=↑、发=↓。额度和到期写在 `nodes.json`：`"quota_gb"`（每月 GB，0=未知）、`"expire"`（Unix 时间戳，0=不显示）。改完 `systemctl restart sub-server`，客户端刷新订阅即可。vnstat 只从安装时开始计数，装好当月偏少。老机器补装：`apt-get install -y vnstat` + 用 `patch_userinfo.py` 的同款改动（2026-10-15 两台已打）。
+
 ---
 
 ## 5. 排查
@@ -254,6 +257,7 @@ grep -c 'reality-warp -> warp' /var/log/xray/access.log  # 是不是全被塞进
 
 | 症状 | 根因 | 处理 |
 |------|------|------|
+| Clash 客户端导入报 `global-client-fingerprint configuration is removed` | 新版 mihomo 删掉了全局指纹选项 | `build_clash` 不再输出这行，指纹只写在每个 VLESS 节点的 `client-fingerprint` 上（2026-10-15 两台已改，用户的 Clash Plus = FlClash 内核，UA `FlClash/v0.9.0 clash-verge Platform/windows`） |
 | 一切正常但用户就是慢 | 流量全走了 WARP 出口(0.5MB/s) | 2053 改 AI-only 分流 §3.1 |
 | 刷新订阅后节点全没了 | `/sub` 返回了配置文件格式 | `/sub` 只给订阅类格式 §3.2 |
 | 节点全红、抓包无 SYN | GFW 封 IP | 换 IP / CDN 中转 |

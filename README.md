@@ -53,5 +53,6 @@ cd ~/claude-skills-public && ./install.sh
 | [`refimg-prompt-cn`](skills/refimg-prompt-cn) | 用多张参考图（人脸 / 背景 / 服装妆造）撰写中文 AI 生图提示词，锁定人物身份一致性。当用户要复刻某张照片、用参考图生成人物写真、做古风妆造或 cos 系… |
 | [`wechat-miniprogram-lab-report`](skills/wechat-miniprogram-lab-report) | 自动完成"微信小程序"课程的实验报告（docx）——读懂报告里的实验内容，按题目在本机用微信开发者工具新建无模板项目、写代码、自动运行并截模拟器/开发者工具截图… |
 | [`x-article-pipeline`](skills/x-article-pipeline) | 把一个热门话题（新模型、新产品、科技新闻）做成一整套 X（推特）长文发布物料的完整流程：联网调研 → 写中文长文正文 → 按 X Articles 编辑器排版 … |
+| [`x-article-standard`](skills/x-article-standard) | 推特 / X 长文（Articles）写作规范和图文工作台对接：按 X 官方 Creator Academy 规范和 @noahvisualsx 的风格写长文、教程… |
 | [`x-viral-writer`](skills/x-viral-writer) | 给 @noahvisualsx 写推特/X 内容：长文 Article、短推、串推、发布文案和首评，含每日选题。用户说写推特、推文、X 长文、教程帖、羊毛帖、发… |
 | [`嵌入式`](skills/嵌入式) | 填写"嵌入式技术实验"（STM32CubeMX + Keil + Proteus，STM32F103C6）实验报告 docx 里的「4．实验方法和步骤（含设计）… |

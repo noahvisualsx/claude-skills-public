@@ -31,7 +31,7 @@ systemctl disable --now apt-daily.timer apt-daily-upgrade.timer 2>/dev/null
 systemctl stop unattended-upgrades 2>/dev/null
 pkill -9 -f unattended-upgr; sleep 2; dpkg --configure -a
 apt-get update -qq
-apt-get install -y -qq curl unzip ufw fail2ban openssl gnupg ca-certificates qrencode python3-yaml
+apt-get install -y -qq curl unzip ufw fail2ban openssl gnupg ca-certificates qrencode python3-yaml vnstat
 
 # ---------- 3. Xray ----------
 step "3/10 Xray"
