@@ -1,5 +1,7 @@
 # Claude Skills
 
+> 生图、视频类 skill（提示词、照片复刻、视频复刻等）在 [noahvisualsx-skill](https://github.com/noahvisualsx/noahvisualsx-skill)。
+
 我自己做的 Claude / Claude Code skill 合集。
 
 ## 新电脑一键安装
