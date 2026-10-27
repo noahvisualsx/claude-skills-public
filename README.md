@@ -46,6 +46,7 @@ cd ~/claude-skills-public && ./install.sh
 | [`apple-ui-design`](skills/apple-ui-design) | 按 Apple 最新设计规范（HIG 2026 / Liquid Glass / iOS·macOS 26–27）设计、实现、审查 Apple 平台界面。用户说… |
 | [`code-tutor`](skills/code-tutor) | 一对一教编程的方法，重点是 C 语言和中国专升本 / 期末考备考。当用户贴代码问"这是什么意思"、贴报错截图、说"看不懂 / 没听懂 / 好难 / 我才刚入门"… |
 | [`faceswap-prompt-cn`](skills/faceswap-prompt-cn) | 为 ChatGPT Image / Nano Banana / 即梦等模型编写中文换脸提示词——把用户「母图」里角色的脸，移植到另一张「场景图」的画面里，身份不… |
+| [`github-gems-cn`](skills/github-gems-cn) | 在 GitHub 上找刚火起来的开源项目（付费软件平替、Mac 小工具、AI 创作工具），核对星数、协议、安装包大小，写成中文推荐短推… |
 | [`node-ops`](skills/node-ops) | 自建代理 VPS 节点的搭建、巡检、排查、订阅运维（Xray VLESS-Reality + Cloudflare WARP 解锁 + Hysteria2 + … |
 | [`php-mysql-coursework`](skills/php-mysql-coursework) | 完成"PHP动态网站开发"一类的课程设计/上机/补考任务，包括两种形态——(1) 老师给一个 DEMO 参考网站（PHP+MySQL，通常是图书/学生管理之类的… |
 | [`platform-article-writer`](skills/platform-article-writer) | 为今日头条、百家号、微信公众号、小红书、知乎、X/推特等平台写文章或帖子，按平台排版，逻辑清楚、像真人写的、没有AI味。用户说“写一篇头条/百家号/公众号/推文… |
